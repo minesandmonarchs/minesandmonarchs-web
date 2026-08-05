@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const mount = '/minesandmonarchs-web';
+const mount = '/minesandmonarchs.com';
 const root = path.join(__dirname);
 
 // Serve static files under the mount path
