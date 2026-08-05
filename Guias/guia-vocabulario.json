@@ -3,7 +3,7 @@
     {
       "id": "Ban",
       "titulo": "Baneo = Muerte Verdadera",
-      "img": "https://images.unsplash.com/photo-1509281373149-e957c6296406?w=200&h=160&fit=crop",
+      "img": "https://i.pinimg.com/1200x/1e/26/8c/1e268cae41e07192a49dc33b2914de24.jpg",
       "modal": {
         "img": "https://images.unsplash.com/photo-1509281373149-e957c6296406?w=720&h=360&fit=crop",
         "titulo": "Baneo = Muerte Verdadera",
@@ -15,20 +15,20 @@
     {
       "id": "Bug",
       "titulo": "Bug = Distorsión",
-      "img": "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=200&h=160&fit=crop",
+      "img": "https://i.pinimg.com/736x/e9/c0/56/e9c05697bb26546cca4983572968ce9f.jpg",
       "modal": {
         "img": "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=720&h=360&fit=crop",
         "titulo": "Bug = Distorsión",
         "secciones": [
           { "titulo": "¿Qué es una Distorsión?", "texto": "Una distorsión es un bug, error o problema de diseño que no se puede explicar dentro del rol.", "lista": [] },
-          { "titulo": "Ejemplos", "texto": "", "lista": ["Si tienes un lagazo y te caes en una cueva, sería una distorsión", "Si te desaparece un objeto, también lo es", "Cualquier error del servidor sin explicación roleplay"] }
+          { "titulo": "Ejemplos", "texto": "", "lista": ["Si tienes un lagazo y te caes en una cueva, sería una distorsión.", "Si te desaparece un objeto, también lo es.", "Cualquier error del servidor sin explicación roleplay."] }
         ]
       }
     },
     {
       "id": "Admin",
       "titulo": "Admins = Dioses",
-      "img": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=200&h=160&fit=crop",
+      "img": "https://i.pinimg.com/736x/01/e6/e0/01e6e02baaa410daa3af7327b5496a77.jpg",
       "modal": {
         "img": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=720&h=360&fit=crop",
         "titulo": "Admins = Dioses",
@@ -42,7 +42,7 @@
     {
       "id": "Respawn",
       "titulo": "Respawn = Reaparición",
-      "img": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=200&h=160&fit=crop",
+      "img": "https://i.pinimg.com/736x/3c/61/8b/3c618bf1260c724b3acd63d360f3b83e.jpg",
       "modal": {
         "img": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=720&h=360&fit=crop",
         "titulo": "Respawn = Reaparición",
@@ -52,22 +52,9 @@
       }
     },
     {
-      "id": "Mensaje-privado",
-      "titulo": "Mensaje privado = Susurro",
-      "img": "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=200&h=160&fit=crop",
-      "modal": {
-        "img": "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=720&h=360&fit=crop",
-        "titulo": "Mensaje privado = Susurro",
-        "secciones": [
-          { "titulo": "¿Qué es un Susurro?", "texto": "Cuando le quieres enviar un mensaje privado a un jugador, ya sea desde Discord o desde Minecraft.", "lista": [] },
-          { "titulo": "Ejemplo de uso", "texto": "", "lista": ["Te lo mando por MD → Te lo voy a susurrar"] }
-        ]
-      }
-    },
-    {
       "id": "Discord",
-      "titulo": "Discord = Tablón",
-      "img": "https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=200&h=160&fit=crop",
+      "titulo": "Discord = Salón",
+      "img": "https://i.pinimg.com/1200x/9f/d6/3b/9fd63bbf2f4a9a85683922626157ac23.jpg",
       "modal": {
         "img": "https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=720&h=360&fit=crop",
         "titulo": "Discord = Tablón",
@@ -80,7 +67,7 @@
     {
       "id": "Desconectarse",
       "titulo": "Desconectarse = Dormir/Descansar",
-      "img": "https://images.unsplash.com/photo-1520209268518-aec60b8bb5ca?w=200&h=160&fit=crop",
+      "img": "https://i.pinimg.com/736x/ce/be/47/cebe4728779c6ddb372317a661fecc34.jpg",
       "modal": {
         "img": "https://images.unsplash.com/photo-1520209268518-aec60b8bb5ca?w=720&h=360&fit=crop",
         "titulo": "Desconectarse = Dormir/Descansar",
