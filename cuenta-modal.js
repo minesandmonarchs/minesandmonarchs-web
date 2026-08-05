@@ -70,8 +70,8 @@ let _currentPassword = '';
 let _discordIdPendiente = null;
 
 function redirigirSegunRol(rol, uid) {
-    if (rol === 'admin') window.location.href = `/minesandmonarchs-web/Admin/admin.html`;
-    else window.location.href = `/minesandmonarchs-web/Mundo/Personajes/personaje.html?uid=${uid}`;
+    if (rol === 'admin') window.location.href = `/Admin/admin.html`;
+    else window.location.href = `/Mundo/Personajes/personaje.html?uid=${uid}`;
 }
 
 function inyectar() {
@@ -187,8 +187,8 @@ function guardarSesion(datos) {
         li.innerHTML = `
             <button class="dropbtn" style="font-weight:bold;color:#ffd700;display:flex;align-items:center;gap:6px">⚜ ${datos.nombreRol}</button>
             <ul class="dropdown-content" style="right:0;left:auto;min-width:160px;">
-                <li><a href="/minesandmonarchs-web/Mundo/Personajes/personaje.html?uid=${datos.uid}">Mi cartilla</a></li>
-                ${esAdmin ? `<li><a href="/minesandmonarchs-web/Admin/admin.html" style="color:#ffd700">⚙️ Panel Admin</a></li>` : ''}
+                <li><a href="/Mundo/Personajes/personaje.html?uid=${datos.uid}">Mi cartilla</a></li>
+                ${esAdmin ? `<li><a href="/Admin/admin.html" style="color:#ffd700">⚙️ Panel Admin</a></li>` : ''}
                 <li><a href="#" id="btnCerrarSesion">Cerrar sesión</a></li>
             </ul>`;
         li.querySelector('.dropbtn').addEventListener('click', e => { e.preventDefault(); li.querySelector('.dropdown-content').classList.toggle('show'); });

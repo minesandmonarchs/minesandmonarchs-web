@@ -87,7 +87,7 @@ function denegarAcceso() {
         <div class="admin-denegado">
             <h2>⛔ Acceso denegado</h2>
             <p>No tienes permisos para ver esta página.</p>
-            <a href="/minesandmonarchs-web/" style="color:#ffd700">← Volver al inicio</a>
+            <a href="https://www.minesandmonarchs.com//" style="color:#ffd700">← Volver al inicio</a>
         </div>`;
 }
 
@@ -98,7 +98,7 @@ document.getElementById('btnCerrarSesionAdmin').addEventListener('click', async 
     e.preventDefault();
     await signOut(auth);
     sessionStorage.removeItem('mm_usuario');
-    window.location.href = '/minesandmonarchs-web/';
+    window.location.href = 'https://www.minesandmonarchs.com/';
 });
 
 /* ════════════════════════
