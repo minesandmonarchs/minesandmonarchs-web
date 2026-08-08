@@ -5,8 +5,8 @@
       "nombre": "Centralia",
       "subtitulo": "El Reino central",
       "forma_gobierno": "Aristocracia",
-      "img_banner": "https://media.discordapp.net/attachments/1392881736773533787/1534274066381537280/image.png?ex=6a738792&is=6a723612&hm=d47a5d5232f9b8292b630474098a9be03248625ed93c1e34ac62183df7a537e7&=&format=webp&quality=lossless",
-      "img_card": "https://media.discordapp.net/attachments/1392881736773533787/1534274066381537280/image.png?ex=6a738792&is=6a723612&hm=d47a5d5232f9b8292b630474098a9be03248625ed93c1e34ac62183df7a537e7&=&format=webp&quality=lossless",
+      "img_banner": "fotos/centralia.png",
+      "img_card": "fotos/centralia.png",
       "descripcion_corta": "Un reino con el único objetivo de conmemorar los reinos caídos provenientes de todas las razas existentes.",
       "descripcion": [
         "Centralia es un reino con varias zonas pequeñas dedicadas a cada raza existente.",
