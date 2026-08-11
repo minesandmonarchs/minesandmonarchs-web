@@ -46,11 +46,11 @@
     "habilidades": [
       {
         "nombre": "MAGIA",
-        "desc": "Los Elfos del Bosque dominan la magia de la naturaleza y los hechizos benditos de curación."
+        "desc": "Los elfos dominan la magia de la naturaleza y los hechizos benditos de curación."
       },
       {
         "nombre": "ALQUIMIA",
-        "desc": "Los elfos del bosque saben crear y usar alquimia. Son de los pocos que pueden usar calderos alquimistas, forjas de  pergaminos, yunques arcanos y boticas del botania. "
+        "desc": "Los elfos saben crear y usar alquimia. Son de los pocos que pueden usar calderos alquimistas, forjas de  pergaminos, yunques arcanos y boticas del botania. "
       }
     ],
     "clases": [
