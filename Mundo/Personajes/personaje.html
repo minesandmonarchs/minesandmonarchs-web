@@ -11,7 +11,7 @@
             if (isLocal) {
                 b.setAttribute('href','/');
             } else {
-                b.setAttribute('href','/minesandmonarchs-web/');
+                b.setAttribute('href','/');
             }
         }catch(e){}
     })();
@@ -21,8 +21,209 @@
     <title>Personaje – Mines & Monarchss</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600&family=Silkscreen&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
+    <style>
+        /* ── LAYOUT GRID ── */
+        .pj-page {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            grid-template-areas: "main sidebar";
+            gap: 32px;
+            max-width: 1100px;
+            margin: 48px auto;
+            padding: 0 24px 80px;
+            align-items: start;
+        }
+        .pj-main    { grid-area: main; min-width: 0; }
+        .pj-sidebar { grid-area: sidebar; position: sticky; top: 24px; }
+
+        /* ── CABECERA ── */
+        .pj-header { text-align: center; margin-bottom: 36px; }
+        .pj-nombre {
+            font-family: "MedievalSharp", cursive;
+            font-size: 2.8em; color: #ffd700; margin: 0 0 8px;
+            text-shadow: 0 0 32px rgba(255,215,0,0.25); line-height: 1.15;
+        }
+        .pj-registro {
+            font-family: "Cinzel", serif; color: rgba(255,215,0,0.4);
+            font-size: 0.82em; letter-spacing: 0.18em; text-transform: uppercase;
+        }
+        .pj-divider {
+            width: 140px; height: 1px;
+            background: linear-gradient(90deg, transparent, #ffd700, transparent);
+            margin: 20px auto; opacity: 0.35;
+        }
+        .pj-divider-ornament {
+            text-align: center; color: rgba(255,215,0,0.3);
+            font-size: 1.1em; margin: -10px 0 24px; letter-spacing: 0.5em;
+        }
+
+        /* ── SECCIÓN HISTORIA ── */
+        .pj-bio-section {
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,215,0,0.1);
+            border-radius: 10px; padding: 28px; position: relative;
+        }
+        .pj-bio-section::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.3), transparent);
+            border-radius: 10px 10px 0 0;
+        }
+        .pj-section-label {
+            font-family: "Cinzel", serif; color: rgba(255,215,0,0.55);
+            font-size: 0.7em; letter-spacing: 0.2em; text-transform: uppercase;
+            margin: 0 0 16px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+        }
+        .pj-section-label::after {
+            content: ''; flex: 1; min-width: 20px; height: 1px; background: rgba(255,215,0,0.12);
+        }
+        .pj-bio-vacio { color: rgba(168,144,96,0.3); font-style: italic; font-family: Georgia, serif; font-size: 0.9em; }
+
+        /* ── BADGES ── */
+        .pj-bio-badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            font-family: Georgia, serif; font-size: 0.78em; padding: 2px 10px;
+            border-radius: 20px; font-style: normal; letter-spacing: 0.02em;
+        }
+        .pj-bio-badge.pendiente { background: rgba(255,165,0,0.12); border: 1px solid rgba(255,165,0,0.3); color: #ffa500; }
+        .pj-bio-badge.aprobado  { background: rgba(80,200,100,0.1);  border: 1px solid rgba(80,200,100,0.25); color: #6dc87a; }
+        .pj-bio-badge.rechazado { background: rgba(200,50,50,0.1);   border: 1px solid rgba(200,50,50,0.25);  color: #e07070; }
+
+        /* ── BOTONES ── */
+        .pj-btn {
+            font-family: "Cinzel", serif; font-size: 0.75em; letter-spacing: 0.05em;
+            padding: 7px 18px; border-radius: 6px; cursor: pointer; border: none; transition: all 0.2s;
+        }
+        .pj-btn-editar   { background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.3); color: #ffd700; }
+        .pj-btn-editar:hover { background: rgba(255,215,0,0.16); }
+        .pj-btn-guardar  { background: rgba(255,215,0,0.15); border: 1px solid rgba(255,215,0,0.5); color: #ffd700; }
+        .pj-btn-guardar:hover { background: rgba(255,215,0,0.25); }
+        .pj-btn-cancelar { background: none; border: 1px solid rgba(255,255,255,0.1); color: rgba(168,144,96,0.6); }
+        .pj-btn-cancelar:hover { color: #a89060; }
+        .pj-btn-aprobar  { background: rgba(80,200,100,0.1); border: 1px solid rgba(80,200,100,0.3); color: #6dc87a; }
+        .pj-btn-aprobar:hover  { background: rgba(80,200,100,0.2); }
+        .pj-btn-rechazar { background: rgba(200,50,50,0.1);  border: 1px solid rgba(200,50,50,0.3);  color: #e07070; }
+        .pj-btn-rechazar:hover { background: rgba(200,50,50,0.2); }
+
+        /* ── CAPÍTULOS ── */
+        .caps-lista { display: flex; flex-direction: column; gap: 20px; }
+        .cap-bloque {
+            background: rgba(0,0,0,0.2); border: 1px solid rgba(255,215,0,0.1);
+            border-radius: 8px; overflow: hidden;
+        }
+        .cap-bloque.aprobado  { border-color: rgba(80,200,100,0.2); }
+        .cap-bloque.pendiente { border-color: rgba(255,165,0,0.2); }
+        .cap-bloque.rechazado { border-color: rgba(200,50,50,0.25); }
+        .cap-header {
+            display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+            padding: 11px 16px; border-bottom: 1px solid rgba(255,215,0,0.06);
+        }
+        .cap-titulo {
+            font-family: "Cinzel", serif; color: rgba(255,215,0,0.75);
+            font-size: 0.75em; letter-spacing: 0.15em; text-transform: uppercase; margin: 0; flex: 1;
+        }
+        .cap-texto {
+            font-family: "IM Fell English", Georgia, serif; color: #c8b888;
+            font-size: 1.02em; line-height: 1.85; font-style: italic; padding: 16px 18px;
+        }
+        .cap-rechazo-nota {
+            display: flex; gap: 10px; background: rgba(200,50,50,0.08);
+            border-top: 1px solid rgba(200,50,50,0.2); padding: 12px 16px;
+        }
+        .cap-rechazo-label {
+            font-family: "Cinzel", serif; font-size: 0.68em; letter-spacing: 0.1em;
+            color: rgba(224,112,112,0.7); text-transform: uppercase; margin-bottom: 4px;
+        }
+        .cap-rechazo-texto { font-family: Georgia, serif; font-size: 0.85em; color: #e07070; line-height: 1.6; font-style: italic; }
+        .cap-input-titulo {
+            width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.35);
+            border: none; border-bottom: 1px solid rgba(255,215,0,0.15); color: #ffd700;
+            font-family: "Cinzel", serif; font-size: 0.8em; padding: 9px 16px; outline: none;
+        }
+        .cap-input-titulo::placeholder { color: rgba(168,144,96,0.4); }
+        .cap-textarea {
+            display: none; width: 100%; box-sizing: border-box; min-height: 130px;
+            background: rgba(0,0,0,0.4); border: none; border-top: 1px solid rgba(255,215,0,0.1);
+            color: #e0d0a8; font-family: "IM Fell English", Georgia, serif;
+            font-size: 1em; font-style: italic; line-height: 1.7; padding: 12px 16px; resize: vertical; outline: none;
+        }
+        .cap-textarea-nota {
+            display: none; width: 100%; box-sizing: border-box; min-height: 65px;
+            background: rgba(200,50,50,0.06); border: none; border-top: 1px solid rgba(200,50,50,0.2);
+            color: #e0b0b0; font-family: Georgia, serif; font-size: 0.88em;
+            font-style: italic; padding: 9px 16px; resize: vertical; outline: none;
+        }
+        .cap-acciones { display: flex; gap: 8px; padding: 10px 14px 12px; flex-wrap: wrap; align-items: center; }
+        .cap-msg { font-family: Georgia, serif; font-size: 0.78em; color: rgba(168,144,96,0.6); font-style: italic; padding: 0 16px 10px; }
+        .cap-nuevo-btn {
+            font-family: "Cinzel", serif; font-size: 0.78em; letter-spacing: 0.06em;
+            padding: 9px 20px; border-radius: 6px; background: rgba(255,215,0,0.05);
+            border: 1px dashed rgba(255,215,0,0.3); color: rgba(255,215,0,0.55);
+            cursor: pointer; width: 100%; margin-top: 16px; transition: all 0.2s;
+        }
+        .cap-nuevo-btn:hover { background: rgba(255,215,0,0.1); border-color: rgba(255,215,0,0.55); color: #ffd700; }
+        .pj-privado-note {
+            display: flex; align-items: center; gap: 6px; font-family: Georgia, serif;
+            font-size: 0.75em; color: rgba(168,144,96,0.4); margin: 6px 16px 0; font-style: italic;
+        }
+
+        /* ── FICHA SIDEBAR ── */
+        .pj-ficha {
+            background: rgba(0,0,0,0.4); border: 1px solid rgba(255,215,0,0.13);
+            border-radius: 10px; overflow: hidden;
+        }
+        .pj-ficha::before {
+            content: ''; display: block; height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.4), transparent);
+        }
+        .pj-avatar-wrap {
+            width: 100%; min-height: 200px; background: rgba(0,0,0,0.5);
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; border-bottom: 1px solid rgba(255,215,0,0.08);
+        }
+        .pj-avatar-wrap img.pj-avatar-custom {
+            width: 100%; height: 100%; object-fit: cover; object-position: top;
+        }
+        .pj-avatar-wrap img.pj-avatar-skin {
+            width: auto; height: 185px; image-rendering: pixelated; display: block;
+        }
+        .pj-avatar-placeholder { font-size: 5em; opacity: 0.12; user-select: none; }
+        .pj-ficha-body { padding: 20px; }
+        .pj-ficha-fila {
+            padding: 11px 0; border-bottom: 1px solid rgba(255,215,0,0.06);
+            display: flex; flex-direction: column; gap: 3px;
+        }
+        .pj-ficha-fila:last-child { border-bottom: none; padding-bottom: 0; }
+        .pj-ficha-fila:first-child { padding-top: 0; }
+        .pj-ficha-label {
+            font-family: "Cinzel", serif; color: rgba(168,144,96,0.5);
+            font-size: 0.63em; letter-spacing: 0.18em; text-transform: uppercase;
+        }
+        .pj-ficha-valor { font-family: "IM Fell English", Georgia, serif; color: #e0d0a8; font-size: 1em; }
+        .pj-ficha-nombre-rol { font-family: "MedievalSharp", cursive; color: #ffd700; font-size: 1.08em; }
+
+        /* ── ESTADO / CARGA ── */
+        .pj-estado {
+            grid-column: 1 / -1; text-align: center; padding: 100px 20px;
+            font-family: Georgia, serif; color: rgba(168,144,96,0.5);
+        }
+        .pj-spinner {
+            display: inline-block; width: 30px; height: 30px;
+            border: 2px solid rgba(255,215,0,0.12); border-top-color: rgba(255,215,0,0.55);
+            border-radius: 50%; animation: spin 0.85s linear infinite; margin-bottom: 16px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 720px) {
+            .pj-page {
+                grid-template-columns: 1fr;
+                grid-template-areas: "sidebar" "main";
+            }
+            .pj-sidebar { position: static; }
+            .pj-nombre { font-size: 2em; }
+        }
+    </style>
     <style>
       /* ══════════════════════════════════════
          HEADER Y FOOTER — estilo consistente
@@ -196,207 +397,6 @@
         header .header-right ul{gap:0;}
       }
     </style>
-    <style>
-        /* ── LAYOUT GRID ── */
-        .pj-page {
-            display: grid;
-            grid-template-columns: 1fr 280px;
-            grid-template-areas: "main sidebar";
-            gap: 32px;
-            max-width: 1100px;
-            margin: 48px auto;
-            padding: 0 24px 80px;
-            align-items: start;
-        }
-        .pj-main    { grid-area: main; min-width: 0; }
-        .pj-sidebar { grid-area: sidebar; position: sticky; top: 24px; }
-
-        /* ── CABECERA ── */
-        .pj-header { text-align: center; margin-bottom: 36px; }
-        .pj-nombre {
-            font-family: "MedievalSharp", cursive;
-            font-size: 2.8em; color: #ffd700; margin: 0 0 8px;
-            text-shadow: 0 0 32px rgba(255,215,0,0.25); line-height: 1.15;
-        }
-        .pj-registro {
-            font-family: "Cinzel", serif; color: rgba(255,215,0,0.4);
-            font-size: 0.82em; letter-spacing: 0.18em; text-transform: uppercase;
-        }
-        .pj-divider {
-            width: 140px; height: 1px;
-            background: linear-gradient(90deg, transparent, #ffd700, transparent);
-            margin: 20px auto; opacity: 0.35;
-        }
-        .pj-divider-ornament {
-            text-align: center; color: rgba(255,215,0,0.3);
-            font-size: 1.1em; margin: -10px 0 24px; letter-spacing: 0.5em;
-        }
-
-        /* ── SECCIÓN HISTORIA ── */
-        .pj-bio-section {
-            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,215,0,0.1);
-            border-radius: 10px; padding: 28px; position: relative;
-        }
-        .pj-bio-section::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.3), transparent);
-            border-radius: 10px 10px 0 0;
-        }
-        .pj-section-label {
-            font-family: "Cinzel", serif; color: rgba(255,215,0,0.55);
-            font-size: 0.7em; letter-spacing: 0.2em; text-transform: uppercase;
-            margin: 0 0 16px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-        }
-        .pj-section-label::after {
-            content: ''; flex: 1; min-width: 20px; height: 1px; background: rgba(255,215,0,0.12);
-        }
-        .pj-bio-vacio { color: rgba(168,144,96,0.3); font-style: italic; font-family: Georgia, serif; font-size: 0.9em; }
-
-        /* ── BADGES ── */
-        .pj-bio-badge {
-            display: inline-flex; align-items: center; gap: 4px;
-            font-family: Georgia, serif; font-size: 0.78em; padding: 2px 10px;
-            border-radius: 20px; font-style: normal; letter-spacing: 0.02em;
-        }
-        .pj-bio-badge.pendiente { background: rgba(255,165,0,0.12); border: 1px solid rgba(255,165,0,0.3); color: #ffa500; }
-        .pj-bio-badge.aprobado  { background: rgba(80,200,100,0.1);  border: 1px solid rgba(80,200,100,0.25); color: #6dc87a; }
-        .pj-bio-badge.rechazado { background: rgba(200,50,50,0.1);   border: 1px solid rgba(200,50,50,0.25);  color: #e07070; }
-
-        /* ── BOTONES ── */
-        .pj-btn {
-            font-family: "Cinzel", serif; font-size: 0.75em; letter-spacing: 0.05em;
-            padding: 7px 18px; border-radius: 6px; cursor: pointer; border: none; transition: all 0.2s;
-        }
-        .pj-btn-editar   { background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.3); color: #ffd700; }
-        .pj-btn-editar:hover { background: rgba(255,215,0,0.16); }
-        .pj-btn-guardar  { background: rgba(255,215,0,0.15); border: 1px solid rgba(255,215,0,0.5); color: #ffd700; }
-        .pj-btn-guardar:hover { background: rgba(255,215,0,0.25); }
-        .pj-btn-cancelar { background: none; border: 1px solid rgba(255,255,255,0.1); color: rgba(168,144,96,0.6); }
-        .pj-btn-cancelar:hover { color: #a89060; }
-        .pj-btn-aprobar  { background: rgba(80,200,100,0.1); border: 1px solid rgba(80,200,100,0.3); color: #6dc87a; }
-        .pj-btn-aprobar:hover  { background: rgba(80,200,100,0.2); }
-        .pj-btn-rechazar { background: rgba(200,50,50,0.1);  border: 1px solid rgba(200,50,50,0.3);  color: #e07070; }
-        .pj-btn-rechazar:hover { background: rgba(200,50,50,0.2); }
-
-        /* ── CAPÍTULOS ── */
-        .caps-lista { display: flex; flex-direction: column; gap: 20px; }
-        .cap-bloque {
-            background: rgba(0,0,0,0.2); border: 1px solid rgba(255,215,0,0.1);
-            border-radius: 8px; overflow: hidden;
-        }
-        .cap-bloque.aprobado  { border-color: rgba(80,200,100,0.2); }
-        .cap-bloque.pendiente { border-color: rgba(255,165,0,0.2); }
-        .cap-bloque.rechazado { border-color: rgba(200,50,50,0.25); }
-        .cap-header {
-            display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-            padding: 11px 16px; border-bottom: 1px solid rgba(255,215,0,0.06);
-        }
-        .cap-titulo {
-            font-family: "Cinzel", serif; color: rgba(255,215,0,0.75);
-            font-size: 0.75em; letter-spacing: 0.15em; text-transform: uppercase; margin: 0; flex: 1;
-        }
-        .cap-texto {
-            font-family: "EB Garamond", Georgia, serif; color: #c8b888;
-            font-size: 1.15em; line-height: 1.85; font-style: normal; padding: 16px 18px;
-        }
-        .cap-rechazo-nota {
-            display: flex; gap: 10px; background: rgba(200,50,50,0.08);
-            border-top: 1px solid rgba(200,50,50,0.2); padding: 12px 16px;
-        }
-        .cap-rechazo-label {
-            font-family: "Cinzel", serif; font-size: 0.68em; letter-spacing: 0.1em;
-            color: rgba(224,112,112,0.7); text-transform: uppercase; margin-bottom: 4px;
-        }
-        .cap-rechazo-texto { font-family: Georgia, serif; font-size: 0.85em; color: #e07070; line-height: 1.6; font-style: italic; }
-        .cap-input-titulo {
-            width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.35);
-            border: none; border-bottom: 1px solid rgba(255,215,0,0.15); color: #ffd700;
-            font-family: "Cinzel", serif; font-size: 0.8em; padding: 9px 16px; outline: none;
-        }
-        .cap-input-titulo::placeholder { color: rgba(168,144,96,0.4); }
-        .cap-textarea {
-            display: none; width: 100%; box-sizing: border-box; min-height: 130px;
-            background: rgba(0,0,0,0.4); border: none; border-top: 1px solid rgba(255,215,0,0.1);
-            color: #e0d0a8; font-family: "EB Garamond", Georgia, serif;
-            font-size: 1.1em; font-style: normal; line-height: 1.7; padding: 12px 16px; resize: vertical; outline: none;
-        }
-        .cap-textarea-nota {
-            display: none; width: 100%; box-sizing: border-box; min-height: 65px;
-            background: rgba(200,50,50,0.06); border: none; border-top: 1px solid rgba(200,50,50,0.2);
-            color: #e0b0b0; font-family: Georgia, serif; font-size: 0.88em;
-            font-style: italic; padding: 9px 16px; resize: vertical; outline: none;
-        }
-        .cap-acciones { display: flex; gap: 8px; padding: 10px 14px 12px; flex-wrap: wrap; align-items: center; }
-        .cap-msg { font-family: Georgia, serif; font-size: 0.78em; color: rgba(168,144,96,0.6); font-style: italic; padding: 0 16px 10px; }
-        .cap-nuevo-btn {
-            font-family: "Cinzel", serif; font-size: 0.78em; letter-spacing: 0.06em;
-            padding: 9px 20px; border-radius: 6px; background: rgba(255,215,0,0.05);
-            border: 1px dashed rgba(255,215,0,0.3); color: rgba(255,215,0,0.55);
-            cursor: pointer; width: 100%; margin-top: 16px; transition: all 0.2s;
-        }
-        .cap-nuevo-btn:hover { background: rgba(255,215,0,0.1); border-color: rgba(255,215,0,0.55); color: #ffd700; }
-        .pj-privado-note {
-            display: flex; align-items: center; gap: 6px; font-family: Georgia, serif;
-            font-size: 0.75em; color: rgba(168,144,96,0.4); margin: 6px 16px 0; font-style: italic;
-        }
-
-        /* ── FICHA SIDEBAR ── */
-        .pj-ficha {
-            background: rgba(0,0,0,0.4); border: 1px solid rgba(255,215,0,0.13);
-            border-radius: 10px; overflow: hidden;
-        }
-        .pj-ficha::before {
-            content: ''; display: block; height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.4), transparent);
-        }
-        .pj-avatar-wrap {
-            width: 100%; min-height: 200px; background: rgba(0,0,0,0.5);
-            display: flex; align-items: center; justify-content: center;
-            overflow: hidden; border-bottom: 1px solid rgba(255,215,0,0.08);
-        }
-        .pj-avatar-wrap img.pj-avatar-custom {
-            width: 100%; height: 100%; object-fit: cover; object-position: top;
-        }
-        .pj-avatar-wrap img.pj-avatar-skin {
-            width: auto; height: 185px; image-rendering: pixelated; display: block;
-        }
-        .pj-avatar-placeholder { font-size: 5em; opacity: 0.12; user-select: none; }
-        .pj-ficha-body { padding: 20px; }
-        .pj-ficha-fila {
-            padding: 11px 0; border-bottom: 1px solid rgba(255,215,0,0.06);
-            display: flex; flex-direction: column; gap: 3px;
-        }
-        .pj-ficha-fila:last-child { border-bottom: none; padding-bottom: 0; }
-        .pj-ficha-fila:first-child { padding-top: 0; }
-        .pj-ficha-label {
-            font-family: "Cinzel", serif; color: rgba(168,144,96,0.5);
-            font-size: 0.63em; letter-spacing: 0.18em; text-transform: uppercase;
-        }
-        .pj-ficha-valor { font-family: "IM Fell English", Georgia, serif; color: #e0d0a8; font-size: 1em; }
-        .pj-ficha-nombre-rol { font-family: "MedievalSharp", cursive; color: #ffd700; font-size: 1.08em; }
-
-        /* ── ESTADO / CARGA ── */
-        .pj-estado {
-            grid-column: 1 / -1; text-align: center; padding: 100px 20px;
-            font-family: Georgia, serif; color: rgba(168,144,96,0.5);
-        }
-        .pj-spinner {
-            display: inline-block; width: 30px; height: 30px;
-            border: 2px solid rgba(255,215,0,0.12); border-top-color: rgba(255,215,0,0.55);
-            border-radius: 50%; animation: spin 0.85s linear infinite; margin-bottom: 16px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* ── RESPONSIVE ── */
-        @media (max-width: 720px) {
-            .pj-page {
-                grid-template-columns: 1fr;
-                grid-template-areas: "sidebar" "main";
-            }
-            .pj-sidebar { position: static; }
-            .pj-nombre { font-size: 2em; }
-        }
-    </style>
 </head>
 <body>
 
@@ -428,7 +428,7 @@
                     <button class="dropbtn">Ayuda</button>
                     <ul class="dropdown-content">
                         <li><a href="Guias/GuiaBasica.html">Guía Básica</a></li>
-                        <li><a href="Guias/GuiaMods.html">Guía de Mods</a></li>
+                        
                         <li><a href="Guias/GuiaRol.html">Guía de Rol</a></li>
                     </ul>
                 </li>
@@ -446,18 +446,101 @@
         </div>
     </div>
 
-    <footer>
-        <div class="socials">
-            <a href="#" class="discord" title="Discord"></a>
-            <a href="#" class="instagram" title="Instagram"></a>
-            <a href="#" class="tiktok" title="TikTok"></a>
-            <a href="#" class="x" title="X"></a>
-        </div>
-        <button class="apoyar">Apoyar servidor</button>
-        <div class="footer-text">
-            <small>© 2026 Mines & Monarchs. Todos los derechos reservados.</small>
-        </div>
-    </footer>
+<footer>
+  <div class="socials">
+
+    <!-- ICONOS ARRIBA -->
+    <div class="social-icons">
+      <a href="https://discord.gg/GXA2RsjkQu"
+         class="discord"
+         title="Discord"
+         target="_blank"
+         rel="noopener"></a>
+
+      <a href="https://www.reddit.com/r/MinesAndMonarchs/"
+         class="reddit"
+         title="Reddit"
+         target="_blank"
+         rel="noopener"></a>
+    </div>
+
+    <!-- BOTÓN AMARILLO DEBAJO -->
+    <a href="https://www.planetminecraft.com/server/mines-and-monarchs/"
+       class="votar apoyar"
+       title="Votar por servidor"
+       target="_blank"
+       rel="noopener">
+      VOTAR POR SERVIDOR
+    </a>
+
+  </div>
+
+  <div class="footer-text">
+    <small>Mines & Monarchs © 2026</small>
+  </div>
+</footer>
+
+<style>
+  /* TODO CENTRADO */
+  footer .socials{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+  }
+
+  footer .social-icons{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    width:100%;
+  }
+
+  /* RESET TOTAL DEL BOTÓN (ESTO ES LO QUE LO ARREGLA) */
+  footer .votar{
+    all:unset;                 /* 🔥 borra TODO lo heredado de los iconos */
+    display:inline-block;      /* vuelve a ser un botón normal */
+    cursor:pointer;
+  }
+
+  /* BOTÓN AMARILLO ORIGINAL */
+  footer .apoyar{
+    font-family:"Silkscreen", monospace;
+    font-size:0.75rem;
+    letter-spacing:0.03em;
+    color:var(--wine-deep);
+    background:var(--gold);    /* 🔥 AMARILLO */
+    padding:10px 22px;
+    box-shadow:3px 3px 0 0 #7a6207;
+    text-decoration:none;
+    border:none;
+    display:inline-block;
+    margin-top:6px;
+  }
+
+  footer .footer-text small{
+    font-family:"Cinzel", serif;
+    color:rgba(242,233,216,0.5);
+    font-size:0.72rem;
+    letter-spacing:0.03em;
+  }
+  footer .votar{
+  background: var(--gold) !important;      /* amarillo */
+  color: var(--wine-deep) !important;      /* texto legible */
+  background-image: none !important;       /* quita icono de fondo */
+  text-indent: 0 !important;               /* que se vea el texto */
+}
+footer .votar{
+  width: auto !important;
+  height: auto !important;
+  padding: 10px 22px !important;   /* el padding que hace el rectángulo */
+  display: inline-block !important;
+  text-indent: 0 !important;       /* para que se lea el texto */
+  background-image: none !important;
+}
+
+</style>
 
     <link rel="stylesheet" href="cuenta-modal.css">
     <script src="index.js"></script>
@@ -534,12 +617,6 @@
             console.warn('[personaje] No hay parámetro ?uid= en la URL');
             estado.textContent = 'No se especificó ningún personaje.';
         } else {
-            // Aviso de seguridad: si tus reglas de Firestore exigen estar
-            // autenticado para leer 'usuarios', y Firebase Auth aún no ha
-            // restaurado la sesión guardada, la lectura puede fallar con
-            // permission-denied justo después de recargar la página o
-            // entrar aquí directamente por URL. Por eso esperamos a que
-            // onAuthStateChanged confirme el estado antes de leer.
             onAuthStateChanged(auth, (user) => {
                 console.log('[personaje] onAuthStateChanged, usuario:', user ? user.uid : null);
                 cargarPersonaje();
@@ -551,7 +628,7 @@
             let yaCargado = false;
 
             async function cargarPersonaje() {
-                if (yaCargado) return; // evita doble carga si onAuthStateChanged dispara más de una vez
+                if (yaCargado) return;
                 yaCargado = true;
                 console.log('[personaje] Iniciando carga de usuarios/' + uid);
                 try {
@@ -568,7 +645,6 @@
                     const d  = snap.data();
                     const pj = d.personaje;
 
-                    // Capítulos — retrocompatible con bio antigua
                     let capitulos = d.capitulos || [];
                     if (capitulos.length === 0 && d.bio && d.bio.texto) {
                         capitulos = [{
@@ -584,7 +660,6 @@
                     const esPropietario = sesion && sesion.uid === uid;
                     const esAdmin = sesion && sesion.rol === 'admin';
 
-                    // Avatar: imagen propia > skin MC > placeholder
                     const avatarHtml = pj.imagenUrl
                         ? `<img class="pj-avatar-custom" src="${pj.imagenUrl}" alt="${pj.nombreRol}">`
                         : pj.nombreMC
@@ -594,12 +669,10 @@
                                 onerror="this.style.display='none'">`
                             : `<span class="pj-avatar-placeholder">⚜</span>`;
 
-                    // Render página
                     page.innerHTML = `
                         <div class="pj-main">
                             <div class="pj-header">
                                 <h1 class="pj-nombre">⚜ ${pj.nombreRol}</h1>
-                                <p class="pj-registro">Registro # ${String(d.id || '0').padStart(4,'0')}</p>
                                 <div class="pj-divider"></div>
                                 <div class="pj-divider-ornament">✦ ✦ ✦</div>
                             </div>
@@ -639,7 +712,6 @@
                         </aside>
                     `;
 
-                    // ── Render capítulos ──
                     const lista = document.getElementById('capsLista');
 
                     function renderCapitulos() {
@@ -713,7 +785,6 @@
                             `;
                             lista.appendChild(div);
 
-                            // Lógica propietario
                             if (editable) {
                                 const be = document.getElementById('be_' + cap.id);
                                 const bg = document.getElementById('bg_' + cap.id);
@@ -750,7 +821,6 @@
                                 });
                             }
 
-                            // Lógica admin
                             if (esAdmin && cap.estado === 'pendiente') {
                                 const adAp   = document.getElementById('adAp_'   + cap.id);
                                 const adRt   = document.getElementById('adRt_'   + cap.id);
@@ -788,7 +858,6 @@
 
                     renderCapitulos();
 
-                    // Añadir nuevo capítulo
                     document.getElementById('btnNuevoCap')?.addEventListener('click', () => {
                         const nuevo = {
                             id: 'cap_' + Date.now(),
@@ -808,5 +877,46 @@
         }
     </script>
     <script type="module" src="cuenta-modal.js"></script>
+    <script>
+    /* ══════════════════════════════════════
+       Desplegables del header (Creación de
+       personaje, Lore, Ayuda): clic para abrir
+       y cerrar. Controla el display directamente
+       por JS con prioridad máxima (setProperty
+       ...,'important'), así ninguna regla CSS
+       externa puede pisarlo.
+       ══════════════════════════════════════ */
+    document.addEventListener('click', function (e) {
+        const header = document.querySelector('header');
+        if (!header) return;
+
+        function cerrarTodos() {
+            header.querySelectorAll('.dropdown-content').forEach(dc => {
+                dc.style.setProperty('display', 'none', 'important');
+                dc.classList.remove('show');
+            });
+        }
+
+        const btn = e.target.closest('header .dropbtn');
+        if (btn) {
+            e.preventDefault();
+            e.stopPropagation();
+            const contenido = btn.nextElementSibling;
+            if (!contenido || !contenido.classList.contains('dropdown-content')) return;
+
+            const abierto = contenido.style.display === 'block';
+            cerrarTodos();
+            if (!abierto) {
+                contenido.style.setProperty('display', 'block', 'important');
+                contenido.classList.add('show');
+            }
+            return;
+        }
+
+        if (!e.target.closest('header .dropdown-content')) {
+            cerrarTodos();
+        }
+    }, true);
+    </script>
 </body>
 </html>
