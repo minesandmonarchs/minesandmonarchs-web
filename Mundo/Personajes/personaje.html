@@ -117,14 +117,27 @@
         .cap-header {
             display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
             padding: 11px 16px; border-bottom: 1px solid rgba(255,215,0,0.06);
+            cursor: pointer; user-select: none;
         }
+        .cap-bloque.colapsado .cap-header { border-bottom-color: transparent; }
+        .cap-toggle {
+            background: none; border: none; color: rgba(255,215,0,0.55);
+            font-size: 0.9em; line-height: 1; padding: 2px 4px; cursor: pointer;
+            transition: transform 0.25s ease; flex-shrink: 0;
+        }
+        .cap-toggle:hover { color: #ffd700; }
+        .cap-bloque.colapsado .cap-toggle { transform: rotate(-90deg); }
+        .cap-body {
+            display: block;
+        }
+        .cap-bloque.colapsado .cap-body { display: none; }
         .cap-titulo {
             font-family: "Cinzel", serif; color: rgba(255,215,0,0.75);
             font-size: 0.75em; letter-spacing: 0.15em; text-transform: uppercase; margin: 0; flex: 1;
         }
         .cap-texto {
             font-family: "IM Fell English", Georgia, serif; color: #c8b888;
-            font-size: 1.02em; line-height: 1.85; font-style: italic; padding: 16px 18px;
+            font-size: 1.02em; line-height: 1.85; padding: 16px 18px;
         }
         .cap-rechazo-nota {
             display: flex; gap: 10px; background: rgba(200,50,50,0.08);
@@ -135,6 +148,22 @@
             color: rgba(224,112,112,0.7); text-transform: uppercase; margin-bottom: 4px;
         }
         .cap-rechazo-texto { font-family: Georgia, serif; font-size: 0.85em; color: #e07070; line-height: 1.6; font-style: italic; }
+        .cap-nota-secreta {
+            display: flex; gap: 10px; background: rgba(120,90,220,0.08);
+            border-top: 1px solid rgba(120,90,220,0.25); padding: 12px 16px;
+        }
+        .cap-nota-secreta-label {
+            font-family: "Cinzel", serif; font-size: 0.68em; letter-spacing: 0.1em;
+            color: rgba(170,140,240,0.8); text-transform: uppercase; margin-bottom: 4px;
+        }
+        .cap-nota-secreta-texto { font-family: Georgia, serif; font-size: 0.85em; color: #cbb8f5; line-height: 1.6; }
+        .cap-nota-secreta-meta { font-family: Georgia, serif; font-size: 0.72em; color: rgba(170,140,240,0.55); margin-top: 6px; }
+        .cap-textarea-secreta {
+            display: none; width: 100%; box-sizing: border-box; min-height: 60px;
+            background: rgba(120,90,220,0.06); border: none; border-top: 1px solid rgba(120,90,220,0.2);
+            color: #d8caf5; font-family: Georgia, serif; font-size: 0.88em;
+            padding: 9px 16px; resize: vertical; outline: none;
+        }
         .cap-input-titulo {
             width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.35);
             border: none; border-bottom: 1px solid rgba(255,215,0,0.15); color: #ffd700;
@@ -145,7 +174,7 @@
             display: none; width: 100%; box-sizing: border-box; min-height: 130px;
             background: rgba(0,0,0,0.4); border: none; border-top: 1px solid rgba(255,215,0,0.1);
             color: #e0d0a8; font-family: "IM Fell English", Georgia, serif;
-            font-size: 1em; font-style: italic; line-height: 1.7; padding: 12px 16px; resize: vertical; outline: none;
+            font-size: 1em; line-height: 1.7; padding: 12px 16px; resize: vertical; outline: none;
         }
         .cap-textarea-nota {
             display: none; width: 100%; box-sizing: border-box; min-height: 65px;
@@ -659,6 +688,10 @@ footer .votar{
                     const sesion = JSON.parse(sessionStorage.getItem('mm_usuario') || 'null');
                     const esPropietario = sesion && sesion.uid === uid;
                     const esAdmin = sesion && sesion.rol === 'admin';
+                    const nombreAdminActual = sesion
+                        ? (sesion.nombre || sesion.usuario || sesion.nombreMC || sesion.email || sesion.uid || 'Admin')
+                        : 'Admin';
+                    const nombreAutorTexto = pj.nombreRol || pj.nombreMC || uid;
 
                     const avatarHtml = pj.imagenUrl
                         ? `<img class="pj-avatar-custom" src="${pj.imagenUrl}" alt="${pj.nombreRol}">`
@@ -713,6 +746,7 @@ footer .votar{
                     `;
 
                     const lista = document.getElementById('capsLista');
+                    const colapsados = new Set();
 
                     function renderCapitulos() {
                         lista.innerHTML = '';
@@ -737,16 +771,28 @@ footer .votar{
                             div.id = 'cap_' + cap.id;
 
                             div.innerHTML = `
-                                <div class="cap-header">
+                                <div class="cap-header" id="hdr_${cap.id}">
+                                    <button class="cap-toggle" id="ctg_${cap.id}" aria-label="Contraer/expandir capítulo">▾</button>
                                     <p class="cap-titulo">Capítulo ${numCap}${cap.titulo ? ' · ' + cap.titulo : ''}</p>
                                     ${(esPropietario || esAdmin) ? badgeHtml(cap.estado) : ''}
                                 </div>
+
+                                <div class="cap-body" id="body_${cap.id}">
 
                                 ${cap.estado === 'rechazado' && cap.notaRechazo && (esPropietario || esAdmin) ? `
                                 <div class="cap-rechazo-nota">
                                     <div>
                                         <p class="cap-rechazo-label">✗ Motivo del rechazo</p>
                                         <p class="cap-rechazo-texto">${cap.notaRechazo}</p>
+                                    </div>
+                                </div>` : ''}
+
+                                ${esAdmin && cap.notaSecreta ? `
+                                <div class="cap-nota-secreta">
+                                    <div>
+                                        <p class="cap-nota-secreta-label">🔒 Comentario secreto (solo admins)</p>
+                                        <p class="cap-nota-secreta-texto">${cap.notaSecreta}</p>
+                                        <p class="cap-nota-secreta-meta">Escrito por: ${cap.notaSecretaAutor || '—'} · Usuario del texto: ${cap.notaSecretaUsuario || nombreAutorTexto}</p>
                                     </div>
                                 </div>` : ''}
 
@@ -780,10 +826,31 @@ footer .votar{
                                         <button class="pj-btn pj-btn-rechazar" id="adRc_${cap.id}">✗ Confirmar rechazo</button>
                                         <button class="pj-btn pj-btn-cancelar" id="adCn_${cap.id}">Cancelar</button>
                                     </div>
+                                    <textarea class="cap-textarea-secreta" id="adSecreta_${cap.id}"
+                                        placeholder="Comentario secreto para el equipo de admins (opcional, no lo ve el jugador)…"></textarea>
+                                    <div class="cap-acciones" id="adApConf_${cap.id}" style="display:none">
+                                        <button class="pj-btn pj-btn-aprobar" id="adApC_${cap.id}">✓ Confirmar aprobación</button>
+                                        <button class="pj-btn pj-btn-cancelar" id="adApCn_${cap.id}">Cancelar</button>
+                                    </div>
                                 ` : ''}
                                 <p class="cap-msg" id="msg_${cap.id}" style="display:none"></p>
+
+                                </div>
                             `;
                             lista.appendChild(div);
+
+                            if (colapsados.has(cap.id)) div.classList.add('colapsado');
+                            const hdr = document.getElementById('hdr_' + cap.id);
+                            hdr.addEventListener('click', () => {
+                                const abierto = !div.classList.contains('colapsado');
+                                if (abierto) {
+                                    div.classList.add('colapsado');
+                                    colapsados.add(cap.id);
+                                } else {
+                                    div.classList.remove('colapsado');
+                                    colapsados.delete(cap.id);
+                                }
+                            });
 
                             if (editable) {
                                 const be = document.getElementById('be_' + cap.id);
@@ -822,17 +889,37 @@ footer .votar{
                             }
 
                             if (esAdmin && cap.estado === 'pendiente') {
-                                const adAp   = document.getElementById('adAp_'   + cap.id);
-                                const adRt   = document.getElementById('adRt_'   + cap.id);
-                                const adRc   = document.getElementById('adRc_'   + cap.id);
-                                const adCn   = document.getElementById('adCn_'   + cap.id);
-                                const adNota = document.getElementById('adNota_' + cap.id);
-                                const adAc   = document.getElementById('adAc_'   + cap.id);
-                                const adConf = document.getElementById('adConf_' + cap.id);
+                                const adAp      = document.getElementById('adAp_'      + cap.id);
+                                const adRt      = document.getElementById('adRt_'      + cap.id);
+                                const adRc      = document.getElementById('adRc_'      + cap.id);
+                                const adCn      = document.getElementById('adCn_'      + cap.id);
+                                const adNota    = document.getElementById('adNota_'    + cap.id);
+                                const adAc      = document.getElementById('adAc_'      + cap.id);
+                                const adConf    = document.getElementById('adConf_'    + cap.id);
+                                const adSecreta = document.getElementById('adSecreta_' + cap.id);
+                                const adApConf  = document.getElementById('adApConf_'  + cap.id);
+                                const adApC     = document.getElementById('adApC_'     + cap.id);
+                                const adApCn    = document.getElementById('adApCn_'    + cap.id);
 
-                                adAp.addEventListener('click', async () => {
-                                    adAp.disabled = true;
+                                adAp.addEventListener('click', () => {
+                                    adSecreta.style.display = 'block'; adApConf.style.display = '';
+                                    adAc.style.display = 'none'; adSecreta.focus();
+                                });
+                                adApCn.addEventListener('click', () => {
+                                    adSecreta.value = '';
+                                    adSecreta.style.display = 'none'; adApConf.style.display = 'none';
+                                    adAc.style.display = '';
+                                });
+                                adApC.addEventListener('click', async () => {
+                                    adApC.disabled = true;
+                                    const notaSecreta = adSecreta.value.trim();
                                     cap.estado = 'aprobado'; cap.notaRechazo = '';
+                                    if (notaSecreta) {
+                                        cap.notaSecreta = notaSecreta;
+                                        cap.notaSecretaAutor = nombreAdminActual;
+                                        cap.notaSecretaUsuario = nombreAutorTexto;
+                                        cap.notaSecretaFecha = new Date().toISOString();
+                                    }
                                     await updateDoc(doc(db, 'usuarios', uid), { capitulos });
                                     renderCapitulos();
                                 });
